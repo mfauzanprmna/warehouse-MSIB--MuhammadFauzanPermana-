@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "item.php";
 require_once "../gudang/gudang.php";
 require_once "../database.php";
@@ -24,9 +26,15 @@ if (isset($_GET['gudang'])) {
     $rowGudang = $data->fetch(PDO::FETCH_ASSOC);
 }
 
+if ($num > 0) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) :
+        $sum += $row['stock'];
+    endwhile;
+}
+
 $stockUpdate = $rowGudang['capacity'] - $sum;
 
-if ($stockUpdate = 0) {
+if ($stockUpdate == 0) {
     $class = "disabled-button";
 }
 
@@ -34,10 +42,30 @@ ob_start()
 
 ?>
 
-<h1>List Barang di Gudang <?php echo $rowGudang['name']; ?></h1>
-<h3 class="mb-3">Capacity <?php echo $rowGudang['capacity'] - $sum; ?></h3>
+<?php if (isset($_SESSION['message'])) : ?>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="toast-header bg-<?= $_SESSION['type']; ?> text-light">
+                <strong class="me-auto">Notifikasi</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <?= $_SESSION['message']; ?>
+            </div>
+        </div>
+    </div>
 
-<a href="/items/create.php?gudang=<?php echo $id; ?>" class="btn btn-primary mb-2 <?php $class; ?>">Add Data</a>
+    <?php
+    unset($_SESSION['message']);
+    unset($_SESSION['type']);
+    ?>
+
+<?php endif; ?>
+
+<h1>List Barang di Gudang <?php echo $rowGudang['name']; ?></h1>
+<h3 class="mb-3">Capacity <?php echo $stockUpdate; ?></h3>
+
+<a href="/items/create.php?gudang=<?php echo $id; ?>" class="btn btn-primary mb-2 <?php echo $class; ?>">Add Data</a>
 <a href="/gudang" class="btn btn-primary ms-2 mb-2">Kembali</a>
 
 <table class="table table-striped table-bordered dataTable" data-page-length='25'>
@@ -53,8 +81,9 @@ ob_start()
     </thead>
 
     <?php if ($num > 0) : ?>
-        <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) :
-            $sum = +$row['stock'];
+        <?php
+        $stmt = $item->read($id);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) :
         ?>
             <tr>
                 <td><?php echo $i++ ?></td>

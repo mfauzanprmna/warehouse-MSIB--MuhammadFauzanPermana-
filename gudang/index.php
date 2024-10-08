@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "gudang.php";
 require_once "../database.php";
 
@@ -57,20 +59,24 @@ ob_start()
                     <td><?php echo $row['opening_hour']; ?></td>
                     <td><?php echo $row['closing_hour']; ?></td>
                     <td>
-                        <a href="/gudang/update.php?id=<?php echo $row['id']; ?>" class="btn btn-warning">Update</a>
-                        <a href="/gudang/proses.php?delete=yes&id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a>
-                        <?php
-                        if ($row['status'] == 'aktif') :
-                        ?>
-                            <a href="/gudang/proses.php?id=<?php echo $row['id']; ?>&aktif=false" class="btn btn-secondary">Nonaktifkan</a>
-                        <?php
-                        elseif ($row['status'] == 'tidak_aktif') :
-                        ?>
-                            <a href="/gudang/proses.php?id=<?php echo $row['id']; ?>&aktif=true" class="btn btn-primary">Aktifkan</a>
-                        <?php
-                        endif;
-                        ?>
-                        <a href="/items?gudang=<?php echo $row['id']; ?>" class="btn btn-info">List Barang</a>
+                        <div class=" d-flex justify-content-between">
+                            <a href="/gudang/update.php?id=<?php echo $row['id']; ?>" class="btn btn-warning">Update</a>
+                            <a href="/gudang/proses.php?delete=yes&id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a>
+                            <?php
+                            if ($row['status'] == 'aktif') :
+                            ?>
+                                <a href="/gudang/proses.php?id=<?php echo $row['id']; ?>&aktif=false" class="btn btn-secondary">Nonaktifkan</a>
+                            <?php
+                            elseif ($row['status'] == 'tidak_aktif') :
+                            ?>
+                                <a href="/gudang/proses.php?id=<?php echo $row['id']; ?>&aktif=true" class="btn btn-primary">Aktifkan</a>
+                            <?php
+                            endif;
+                            ?>
+                        </div>
+                        <div class="mt-2">
+                            <a href="/items?gudang=<?php echo $row['id']; ?>" class="btn btn-info w-100">List Barang</a>
+                        </div>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -88,6 +94,26 @@ ob_start()
         <?php endif; ?>
     </tbody>
 </table>
+
+<?php if (isset($_SESSION['message'])) : ?>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="toast-header bg-<?= $_SESSION['type']; ?> text-light">
+                <strong class="me-auto">Notifikasi</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <?= $_SESSION['message']; ?>
+            </div>
+        </div>
+    </div>
+
+    <?php
+    unset($_SESSION['message']);
+    unset($_SESSION['type']);
+    ?>
+
+<?php endif; ?>
 
 <?php
 $content = ob_get_clean();

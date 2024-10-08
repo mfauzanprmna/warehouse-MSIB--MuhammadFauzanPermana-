@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once "gudang.php";
 require_once "../database.php";
 
@@ -16,11 +18,16 @@ if (isset($_GET['add']) && $_GET['add'] == 'yes' && $_SERVER['REQUEST_METHOD'] =
     $gudang->closing_hour = $_POST['closing_hour'];
 
     if ($gudang->create()) {
-        header("Location: index.php");
-        exit();
+        $_SESSION['message'] = "Data berhasil ditambah";
+        $_SESSION['type'] = "success";
+ 
     } else {
-        echo "Gagal menambah data";
+        $_SESSION['message'] = "Data gagal ditambah";
+        $_SESSION['type'] = "danger";
     }
+
+    header("Location: index.php");
+    exit();
 }
 
 if (isset($_GET['update']) && $_GET['update'] == 'yes' && $_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -32,34 +39,49 @@ if (isset($_GET['update']) && $_GET['update'] == 'yes' && $_SERVER['REQUEST_METH
     $gudang->closing_hour = $_POST['closing_hour'];
 
     if ($gudang->update($_GET['id'])) {
-        header("Location: index.php");
-        exit();
+        $_SESSION['message'] = "Data berhasil diubah";
+        $_SESSION['type'] = "success";
+
     } else {
-        echo "Gagal mengubah data";
+        $_SESSION['message'] = "Data gagal diubah";
+        $_SESSION['type'] = "danger";
     }
+
+    header("Location: index.php");
+    exit();
 }
 
 if (isset($_GET['aktif']) && isset($_GET['id'])) {
     if ($_GET['aktif'] == 'true') {
         $gudang->status = 'aktif';
+        $_SESSION['message'] = "Gudang berhasil diaktifkan";
+        $_SESSION['type'] = "success";
     } else {
         $gudang->status = 'tidak_aktif';
+        $_SESSION['message'] = "Gudang berhasil dinonaktifkan";
+        $_SESSION['type'] = "success";
     }
 
-    if ($gudang->updateStatus($_GET['id'])) {
-        header("Location: index.php");
-        exit();
-    } else {
-        echo "Gagal mengubah data";
+    if (!$gudang->updateStatus($_GET['id'])) {
+        $_SESSION['message'] = "Data gagal diubah";
+        $_SESSION['type'] = "danger";
     }
+
+    header("Location: index.php");
+    exit();
 }
 
 if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
 
     if ($gudang->delete($_GET['id'])) {
-        header("Location: index.php");
-        exit();
+        $_SESSION['message'] = "Data berhasil dihapus";
+        $_SESSION['type'] = "success";
+        
     } else {
-        echo "Gagal menghapus data";
+        $_SESSION['message'] = "Data gagal dihapus";
+        $_SESSION['type'] = "danger";
     }
+
+    header("Location: index.php");
+    exit();
 }

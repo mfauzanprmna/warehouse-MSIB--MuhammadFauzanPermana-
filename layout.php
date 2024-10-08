@@ -9,7 +9,7 @@
     <title>WereHouse</title>
 
     <style>
-    .disabled-button {
+        .disabled-button {
             pointer-events: none;
             opacity: 0.6;
             background-color: gray;
@@ -32,6 +32,14 @@
     <script src="https://cdn.datatables.net/v/bs5/dt-2.1.8/r-3.0.3/datatables.min.js"></script>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var toastElement = document.getElementById('liveToast');
+            if (toastElement) {
+                var toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }
+        });
+
         $(document).ready(function() {
             $('.dataTable').DataTable();
         });

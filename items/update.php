@@ -19,7 +19,7 @@ ob_start();
 
 <a href="index.php?gudang=<?php echo $id_gudang; ?>" class="btn btn-primary mb-3">Kembali</a>
 
-<form action="proses.php?update=yes&id=<?php echo $id; ?>" method="post">
+<form action="prosesItem.php?update=yes&id=<?php echo $id; ?>" method="post">
     <div class="mb-2">
         <label for="name">Name:</label>
         <input type="text" class="form-control" name="name" id="name" value="<?php echo $row['name']; ?>" required><br>
@@ -32,10 +32,10 @@ ob_start();
 
     <div class="mb-2">
         <label for="type">Jenis Barang:</label>
-        <input type="number" class="form-control" name="type" id="type" value="<?php echo $row['type']; ?>" required><br>
+        <input type="text" class="form-control" name="type" id="type" value="<?php echo $row['type']; ?>" required><br>
     </div>
 
-    <input type="hidden" name="id" value="<?php echo $id; ?>">
+    <input type="hidden" name="id_gudang" value="<?php echo $id; ?>">
 
     <button type="submit" class="btn btn-primary">Update</button>
 </form>
