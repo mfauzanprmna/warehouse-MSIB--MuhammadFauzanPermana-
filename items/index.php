@@ -93,13 +93,14 @@ ob_start()
                 <td><?php echo $row['create_timestamp']; ?></td>
                 <td>
                     <a href="/items/update.php?id=<?php echo $row['id']; ?>" class="btn btn-warning">Update</a>
-                    <a href="/items/prosesItem.php?delete=yes&id=<?php echo $row['id']; ?>&gudang=<?php echo $rowGudang['id']; ?>" class="btn btn-danger">Delete</a>
+                    <a href="/items/prosesItem.php?delete=yes&id=<?php echo $row['id']; ?>&gudang=<?php echo $rowGudang['id']; ?>" class="btn btn-danger" onclick="return confirm('Yakin ingin dihapus?')">Delete</a>
                 </td>
             </tr>
         <?php endwhile; ?>
     <?php else : ?>
         <tr>
-            <td colspan="8">No records found</td>
+            <td colspan=" 8">No records found
+            </td>
             <td class="d-none">No records found</td>
             <td class="d-none">No records found</td>
             <td class="d-none">No records found</td>

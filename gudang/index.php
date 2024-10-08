@@ -61,7 +61,7 @@ ob_start()
                     <td>
                         <div class=" d-flex justify-content-between">
                             <a href="/gudang/update.php?id=<?php echo $row['id']; ?>" class="btn btn-warning">Update</a>
-                            <a href="/gudang/proses.php?delete=yes&id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a>
+                            <a href="/gudang/proses.php?delete=yes&id=<?php echo $row['id']; ?>" class="btn btn-danger"  onclick="return confirm('Yakin ingin dihapus?')">Delete</a>
                             <?php
                             if ($row['status'] == 'aktif') :
                             ?>
